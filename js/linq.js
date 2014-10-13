@@ -9,11 +9,13 @@ Array.prototype.Any = function (parClause) {
 };
 
 Array.prototype.Distinct = function (parClause, parReturnObject) {
-	var newList = [], item, distinct = {};
+	var newList = [];
+	var item;
+	var distinct = {};
 
 	for (var arrayIterator = 0; arrayIterator < this.length; arrayIterator++) {
 		item = parClause.apply(this[arrayIterator], [this[arrayIterator]]);
-		if (distinct[item] == void 0) {
+		if (distinct[item] === void 0) {
 			distinct[item] = true;
 
 			if (parReturnObject) {
@@ -33,8 +35,11 @@ Array.prototype.First = function () {
 };
 
 Array.prototype.Intersect = function (parSecondArray, parClause) {
-	var clauseMethod, secondArray = parSecondArray, result = [];
-	if (parClause != void 0) {
+	var clauseMethod
+	var secondArray = parSecondArray;
+	var result = [];
+
+	if (parClause !== void 0) {
 		clauseMethod = parClause;
 	} else {
 		clauseMethod = function (item, index, item2, index2) {
@@ -59,14 +64,16 @@ Array.prototype.Last = function () {
 
 Array.prototype.OrderBy = function (parClause) {
 	this.sort(function (first, second) {
-		var x = parClause.apply(first, [first]), y = parClause.apply(second, [second]);
+		var x = parClause.apply(first, [first]);
+		var y = parClause.apply(second, [second]);
 		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 	});
 };
 
 Array.prototype.OrderByDescending = function (parClause) {
 	this.sort(function (first, second) {
-		var x = parClause.apply(second, [second]), y = parClause.apply(first, [first]);
+		var x = parClause.apply(second, [second]);
+		var y = parClause.apply(first, [first]);
 		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 	});
 };
@@ -106,7 +113,8 @@ Array.prototype.Take = function (parCount) {
 };
 
 Array.prototype.Where = function (parClause) {
-	var newList = [], arrayCount = this.length;
+	var newList = [];
+	var arrayCount = this.length;
 	
 	for (var arrayIterator = 0; arrayIterator < arrayCount; arrayIterator++) {
 		if (parClause.apply(this[arrayIterator], [this[arrayIterator], arrayIterator])) {
