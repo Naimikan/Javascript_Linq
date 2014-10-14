@@ -19,9 +19,9 @@ Array.prototype.Distinct = function (parClause, parReturnObject) {
 			distinct[item] = true;
 
 			if (parReturnObject) {
-				newList.push(this[arrayIterator]);
+				newList[arrayIterator] = this[arrayIterator];
 			} else {
-				newList.push(item);
+				newList[arrayIterator] = item;
 			}
 		}
 	}
@@ -114,9 +114,8 @@ Array.prototype.Take = function (parCount) {
 
 Array.prototype.Where = function (parClause) {
 	var newList = [];
-	var arrayCount = this.length;
 	
-	for (var arrayIterator = 0; arrayIterator < arrayCount; arrayIterator++) {
+	for (var arrayIterator = 0; arrayIterator < this.length; arrayIterator++) {
 		if (parClause.apply(this[arrayIterator], [this[arrayIterator], arrayIterator])) {
 			newList[newList.length] = this[arrayIterator];
 		}
