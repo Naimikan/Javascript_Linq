@@ -1,0 +1,48 @@
+<html>
+	<head></head>
+	<body>
+		<div id="test" style="width: 200px; height: 200px;"></div>
+		<div id="test2" style="width: 200px; height: 200px;"></div>
+	
+		<script type="text/javascript" src="js/linq.js"></script>
+		<script type="text/javascript">
+		
+		var totalLoop = 100000;
+		var arrayLength = 1000;
+		var arrayTest = [];
+
+		var sum1 = 0;
+
+		console.log("Initialize");
+
+		for (var i = 0; i < arrayLength; i++) {
+			arrayTest[i] = {
+				first: Math.floor((Math.random() * 10) + 1)
+				, second: Math.floor((Math.random() * 10) + 1)
+			};
+		}
+
+		console.log("End");
+
+		for (var i = 0; i < totalLoop; i++) {
+			var init = new Date().getTime();
+
+			var resultArray = arrayTest.Where(function (each) {
+				return each.first === Math.floor((Math.random() * 10) + 1);
+			});
+
+			var end = new Date().getTime();
+			
+			sum1 += (end - init)/1000;
+
+			if (i === totalLoop/2) {
+				console.log(i);
+			}
+		}
+
+		console.log("Where");
+		console.log("Total time: " + sum1);
+
+		</script>
+	</body>
+</html>
