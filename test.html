@@ -22,7 +22,7 @@
 
 		console.log("End");
 
-		var sum1 = 0;
+		/*var sum1 = 0;
 
 		for (var i = 0; i < totalLoop; i++) {
 			var init = new Date().getTime();
@@ -41,8 +41,6 @@
 
 		var sum2 = 0;
 
-		console.log(arrayTest);
-
 		for (var i = 0; i < totalLoop; i++) {
 			var init = new Date().getTime();
 
@@ -56,8 +54,41 @@
 		}
 
 		console.log("Any");
-		console.log("Total time: " + sum2);
+		console.log("Total time: " + sum2);*/
 
+		var sum3 = 0;
+
+		for (var i = 0; i < totalLoop; i++) {
+			var init = new Date().getTime();
+
+			arrayTest.OrderBy(function (each) {
+				return each.first;
+			});
+
+			var end = new Date().getTime();
+			
+			sum3 += (end - init)/1000;
+		}
+
+		console.log("OrderBy");
+		console.log("Total time: " + sum3);
+
+		var sum4 = 0;
+
+		for (var i = 0; i < totalLoop; i++) {
+			var init = new Date().getTime();
+
+			arrayTest.OrderByDescending(function (each) {
+				return each.first;
+			});
+
+			var end = new Date().getTime();
+			
+			sum4 += (end - init)/1000;
+		}
+
+		console.log("OrderByDescending");
+		console.log("Total time: " + sum4);
 
 		</script>
 	</body>

@@ -1,6 +1,7 @@
 Array.prototype.Any = function (parClause) {
 	if (this.length > 0) {
-		for (var arrayIterator = 0; arrayIterator < this.length; arrayIterator++) {
+		var arrayLength = this.length;
+		for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
 			if (parClause.call(this[arrayIterator], this[arrayIterator], arrayIterator)) {
 				return true;
 			}
@@ -64,26 +65,48 @@ Array.prototype.Last = function () {
 	return this[this.length - 1];
 };
 
-Array.prototype.OrderBy = function (parClause) {
-	this.sort(function (first, second) {
-		var x = parClause.call(first, first);
-		var y = parClause.call(second, second);
-		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-	});
+Array.prototype.OrderBy = function (parCriteria) {
+	// Bubble sort
+	var swapped, arrayLength = this.length;
+	do {
+		swapped = false;
+		for (var arrayIterator = 0; arrayIterator < arrayLength - 1; arrayIterator++) {
+			var x = parCriteria.call(this[arrayIterator], this[arrayIterator]);
+			var y = parCriteria.call(this[arrayIterator + 1], this[arrayIterator + 1]);
+
+			if (x > y) {
+				var temp = this[arrayIterator];
+				this[arrayIterator] = this[arrayIterator + 1];
+				this[arrayIterator + 1] = temp;
+				swapped = true;
+			}
+		}
+	} while (swapped);
 };
 
-Array.prototype.OrderByDescending = function (parClause) {
-	this.sort(function (first, second) {
-		var x = parClause.call(second, second);
-		var y = parClause.call(first, first);
-		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-	});
+Array.prototype.OrderByDescending = function (parCriteria) {
+	// Bubble sort
+	var swapped, arrayLength = this.length;
+	do {
+		swapped = false;
+		for (var arrayIterator = 0; arrayIterator < arrayLength - 1; arrayIterator++) {
+			var x = parCriteria.call(this[arrayIterator + 1], this[arrayIterator + 1]);
+			var y = parCriteria.call(this[arrayIterator], this[arrayIterator]);
+
+			if (x > y) {
+				var temp = this[arrayIterator + 1];
+				this[arrayIterator + 1] = this[arrayIterator];
+				this[arrayIterator] = temp;
+				swapped = true;
+			}
+		}
+	} while (swapped);
 };
 
 Array.prototype.Select = function (parClause) {
-	var newList = [];
+	var newList = [], arrayLength = this.length;
 
-	for (var arrayIterator = 0, length = this.length; arrayIterator < length; arrayIterator++) {
+	for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
 		if(parClause(this[arrayIterator])) {
 			newList[newList.length] = parClause(this[arrayIterator]);
 		}
@@ -93,9 +116,9 @@ Array.prototype.Select = function (parClause) {
 };
 
 Array.prototype.SelectMany = function (parClause) {
-	var newList = [];
+	var newList = [], arrayLength = this.length;
 
-	for (var arrayIterator = 0, length = this.length; arrayIterator < length; arrayIterator++) {
+	for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
 		newList = newList.concat(parClause(this[arrayIterator]));
 	}
 
@@ -118,7 +141,8 @@ Array.prototype.Where = function (parClause) {
 	var newList = [];
 
 	if (this.length > 0) {
-		for (var arrayIterator = 0, arrayLength = this.length; arrayIterator < arrayLength; arrayIterator++) {
+		var arrayLength = this.length;
+		for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
 			if (parClause.call(this[arrayIterator], this[arrayIterator], arrayIterator)) {
 				newList[newList.length] = this[arrayIterator];
 			}
