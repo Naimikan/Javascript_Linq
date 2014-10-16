@@ -11,8 +11,6 @@
 		var arrayLength = 1000;
 		var arrayTest = [];
 
-		var sum1 = 0;
-
 		console.log("Initialize");
 
 		for (var i = 0; i < arrayLength; i++) {
@@ -24,6 +22,8 @@
 
 		console.log("End");
 
+		var sum1 = 0;
+
 		for (var i = 0; i < totalLoop; i++) {
 			var init = new Date().getTime();
 
@@ -34,14 +34,30 @@
 			var end = new Date().getTime();
 			
 			sum1 += (end - init)/1000;
-
-			if (i === totalLoop/2) {
-				console.log(i);
-			}
 		}
 
 		console.log("Where");
 		console.log("Total time: " + sum1);
+
+		var sum2 = 0;
+
+		console.log(arrayTest);
+
+		for (var i = 0; i < totalLoop; i++) {
+			var init = new Date().getTime();
+
+			var exist = arrayTest.Any(function (each) {
+				return each.first === Math.floor((Math.random() * 10) + 1);
+			});
+
+			var end = new Date().getTime();
+			
+			sum2 += (end - init)/1000;
+		}
+
+		console.log("Any");
+		console.log("Total time: " + sum2);
+
 
 		</script>
 	</body>

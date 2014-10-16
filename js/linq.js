@@ -1,7 +1,9 @@
 Array.prototype.Any = function (parClause) {
-	for (var arrayIterator = 0; arrayIterator < this.length; arrayIterator++) {
-		if (parClause.apply(this[arrayIterator], [this[arrayIterator], arrayIterator])) {
-			return true;
+	if (this.length > 0) {
+		for (var arrayIterator = 0; arrayIterator < this.length; arrayIterator++) {
+			if (parClause.call(this[arrayIterator], this[arrayIterator], arrayIterator)) {
+				return true;
+			}
 		}
 	}
 
@@ -14,7 +16,7 @@ Array.prototype.Distinct = function (parClause, parReturnObject) {
 	var distinct = {};
 
 	for (var arrayIterator = 0; arrayIterator < this.length; arrayIterator++) {
-		item = parClause.apply(this[arrayIterator], [this[arrayIterator]]);
+		item = parClause.call(this[arrayIterator], this[arrayIterator]);
 		if (distinct[item] === void 0) {
 			distinct[item] = true;
 
@@ -64,16 +66,16 @@ Array.prototype.Last = function () {
 
 Array.prototype.OrderBy = function (parClause) {
 	this.sort(function (first, second) {
-		var x = parClause.apply(first, [first]);
-		var y = parClause.apply(second, [second]);
+		var x = parClause.call(first, first);
+		var y = parClause.call(second, second);
 		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 	});
 };
 
 Array.prototype.OrderByDescending = function (parClause) {
 	this.sort(function (first, second) {
-		var x = parClause.apply(second, [second]);
-		var y = parClause.apply(first, [first]);
+		var x = parClause.call(second, second);
+		var y = parClause.call(first, first);
 		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 	});
 };
@@ -114,15 +116,19 @@ Array.prototype.Take = function (parCount) {
 
 Array.prototype.Where = function (parClause) {
 	var newList = [];
-	
-	for (var arrayIterator = 0; arrayIterator < this.length; arrayIterator++) {
-		if (parClause.apply(this[arrayIterator], [this[arrayIterator], arrayIterator])) {
-			newList[newList.length] = this[arrayIterator];
-		}
-	}
 
-	if (newList.length == 1) {
-		return newList.First();
+	if (this.length > 0) {
+		for (var arrayIterator = 0, arrayLength = this.length; arrayIterator < arrayLength; arrayIterator++) {
+			if (parClause.call(this[arrayIterator], this[arrayIterator], arrayIterator)) {
+				newList[newList.length] = this[arrayIterator];
+			}
+		}
+
+		if (newList.length == 1) {
+			return newList.First();
+		} else {
+			return newList;
+		}
 	} else {
 		return newList;
 	}
