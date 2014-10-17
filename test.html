@@ -7,7 +7,7 @@
 		<script type="text/javascript" src="js/linq.js"></script>
 		<script type="text/javascript">
 		
-		var totalLoop = 1;
+		var totalLoop = 100000;
 		//var totalLoop = 1;
 		var arrayLength = 1000;
 		var arrayTest = [];
@@ -30,7 +30,7 @@
 
 		console.log("End");
 
-		var sum1 = 0;
+		/*var sum1 = 0;
 
 		for (var i = 0; i < totalLoop; i++) {
 			var init = new Date().getTime();
@@ -137,9 +137,24 @@
 		}
 
 		console.log("Last");
-		console.log("Total time: " + sum7);
+		console.log("Total time: " + sum7);*/
 
-		console.log(arrayTest);
+		var sum8 = 0;
+
+		for (var i = 0; i < totalLoop; i++) {
+			var init = new Date().getTime();
+
+			var resultArray = arrayTest.Distinct(function (each) {
+				return each.first;
+			});
+
+			var end = new Date().getTime();
+			
+			sum8 += (end - init)/1000;
+		}
+
+		console.log("Distinct");
+		console.log("Total time: " + sum8);
 
 		</script>
 	</body>
