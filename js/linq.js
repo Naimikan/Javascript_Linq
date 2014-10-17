@@ -11,10 +11,51 @@ Array.prototype.Any = function (parClause) {
 	return false;
 };
 
-Array.prototype.Distinct = function (parClause, parReturnObject) {
-	var newList = [], item, distinct = {};
+//Array.prototype.Distinct = function () {
+	/*var newList = [], arrayLength = this.length;
 
-	for (var arrayIterator = 0; arrayIterator < this.length; arrayIterator++) {
+	for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
+		if (this.indexOf(this[arrayIterator]) == arrayIterator) {
+			newList.push(this[arrayIterator]);
+		}
+	}
+
+	return newList;*/
+
+	/*return this.filter(function (item, pos, self) {
+	    return self.indexOf(item) == pos;
+	});*/
+
+	/*return this.filter(function (s, i, a) {
+		return i == a.lastIndexOf(s); 
+	});*/
+//};
+
+// Pobema
+/*Array.prototype.Distinct = function (parClause, parReturnObject) {
+	var newList = [], item, arrayLength = this.length;
+
+	var aProps = Object.getOwnPropertyNames(a);
+    var bProps = Object.getOwnPropertyNames(b);
+
+    // If number of properties is different, objects are not equivalent
+
+    if (aProps.length != bProps.length) {
+        return false;
+    }
+
+    for (var i = 0; i < aProps.length; i++) {
+        var propName = aProps[i];
+
+        // If values of same property are not equal, objects are not equivalent
+        if (a[propName] !== b[propName]) {
+           return false;
+        }
+    }
+
+	
+
+	for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
 		item = parClause.call(this[arrayIterator], this[arrayIterator]);
 		if (distinct[item] === void 0) {
 			distinct[item] = true;
@@ -29,7 +70,7 @@ Array.prototype.Distinct = function (parClause, parReturnObject) {
 
 	distinct = null;
 	return newList;
-};
+};*/
 
 Array.prototype.First = function () {
 	return this[0];

@@ -7,8 +7,8 @@
 		<script type="text/javascript" src="js/linq.js"></script>
 		<script type="text/javascript">
 		
-		var totalLoop = 100000;
-		//var totalLoop = 1;
+		//var totalLoop = 100000;
+		var totalLoop = 1;
 		var arrayLength = 1000;
 		var arrayTest = [];
 
@@ -145,8 +145,10 @@
 			var init = new Date().getTime();
 
 			var resultArray = arrayTest.Distinct(function (each) {
-				return each.first;
+				return each;
 			});
+
+			console.log(resultArray);
 
 			var end = new Date().getTime();
 			
