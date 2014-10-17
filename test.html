@@ -8,15 +8,23 @@
 		<script type="text/javascript">
 		
 		var totalLoop = 100000;
+		//var totalLoop = 1;
 		var arrayLength = 1000;
 		var arrayTest = [];
 
 		console.log("Initialize");
 
 		for (var i = 0; i < arrayLength; i++) {
-			arrayTest[i] = {
+			/*arrayTest[i] = {
 				first: Math.floor((Math.random() * 10) + 1)
 				, second: Math.floor((Math.random() * 10) + 1)
+				, third: Math.floor((Math.random() * 10) + 1)
+			};*/
+
+			arrayTest[i] = {
+				first: "first"
+				, second: "second"
+				, third: "third"
 			};
 		}
 
@@ -27,7 +35,7 @@
 		for (var i = 0; i < totalLoop; i++) {
 			var init = new Date().getTime();
 
-			var resultArray = arrayTest.Where(function (each) {
+			var resultArray = arrayTest.Where(function (each, index) {
 				return each.first === Math.floor((Math.random() * 10) + 1);
 			});
 
@@ -37,9 +45,9 @@
 		}
 
 		console.log("Where");
-		console.log("Total time: " + sum1);
+		console.log("Total time: " + sum1);*/
 
-		var sum2 = 0;
+		/*var sum2 = 0;
 
 		for (var i = 0; i < totalLoop; i++) {
 			var init = new Date().getTime();
@@ -56,14 +64,13 @@
 		console.log("Any");
 		console.log("Total time: " + sum2);*/
 
-		var sum3 = 0;
+		/*var sum3 = 0;
 
 		for (var i = 0; i < totalLoop; i++) {
 			var init = new Date().getTime();
 
-			arrayTest.OrderBy(function (each) {
-				return each.first;
-			});
+			arrayTest.OrderBy("second");
+			console.log(arrayTest);
 
 			var end = new Date().getTime();
 			
@@ -71,16 +78,14 @@
 		}
 
 		console.log("OrderBy");
-		console.log("Total time: " + sum3);
+		console.log("Total time: " + sum3);*/
 
-		var sum4 = 0;
+		/*var sum4 = 0;
 
 		for (var i = 0; i < totalLoop; i++) {
 			var init = new Date().getTime();
 
-			arrayTest.OrderByDescending(function (each) {
-				return each.first;
-			});
+			arrayTest.OrderByDescending("first");
 
 			var end = new Date().getTime();
 			
@@ -88,7 +93,23 @@
 		}
 
 		console.log("OrderByDescending");
-		console.log("Total time: " + sum4);
+		console.log("Total time: " + sum4);*/
+
+		var sum5 = 0;
+
+		for (var i = 0; i < totalLoop; i++) {
+			var init = new Date().getTime();
+
+			var resultArray = arrayTest.Select("first, third");
+
+			var end = new Date().getTime();
+			
+			sum5 += (end - init)/1000;
+		}
+
+		console.log("Select");
+		console.log("Total time: " + sum5);
+
 
 		</script>
 	</body>

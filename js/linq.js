@@ -2,7 +2,7 @@ Array.prototype.Any = function (parClause) {
 	if (this.length > 0) {
 		var arrayLength = this.length;
 		for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
-			if (parClause.call(this[arrayIterator], this[arrayIterator], arrayIterator)) {
+			if (parClause(this[arrayIterator], arrayIterator)) {
 				return true;
 			}
 		}
@@ -12,9 +12,7 @@ Array.prototype.Any = function (parClause) {
 };
 
 Array.prototype.Distinct = function (parClause, parReturnObject) {
-	var newList = [];
-	var item;
-	var distinct = {};
+	var newList = [], item, distinct = {};
 
 	for (var arrayIterator = 0; arrayIterator < this.length; arrayIterator++) {
 		item = parClause.call(this[arrayIterator], this[arrayIterator]);
@@ -38,9 +36,7 @@ Array.prototype.First = function () {
 };
 
 Array.prototype.Intersect = function (parSecondArray, parClause) {
-	var clauseMethod
-	var secondArray = parSecondArray;
-	var result = [];
+	var clauseMethod, secondArray = parSecondArray, result = [];
 
 	if (parClause !== void 0) {
 		clauseMethod = parClause;
@@ -66,53 +62,92 @@ Array.prototype.Last = function () {
 };
 
 Array.prototype.OrderBy = function (parCriteria) {
-	// Bubble sort
-	var swapped, arrayLength = this.length;
-	do {
-		swapped = false;
-		for (var arrayIterator = 0; arrayIterator < arrayLength - 1; arrayIterator++) {
-			var x = parCriteria.call(this[arrayIterator], this[arrayIterator]);
-			var y = parCriteria.call(this[arrayIterator + 1], this[arrayIterator + 1]);
+	if (parCriteria !== void 0) {
+		if (typeof parCriteria === 'string') {
+			// Bubble sort
+			var swapped, arrayLength = this.length;
+			do {
+				swapped = false;
+				for (var arrayIterator = 0; arrayIterator < arrayLength - 1; arrayIterator++) {
+					var x = this[arrayIterator][parCriteria];
+					var y = this[arrayIterator + 1][parCriteria];
 
-			if (x > y) {
-				var temp = this[arrayIterator];
-				this[arrayIterator] = this[arrayIterator + 1];
-				this[arrayIterator + 1] = temp;
-				swapped = true;
-			}
+					if (x > y) {
+						var temp = this[arrayIterator];
+						this[arrayIterator] = this[arrayIterator + 1];
+						this[arrayIterator + 1] = temp;
+						swapped = true;
+					}
+				}
+			} while (swapped);
+		} else {
+			throw 'Invalid Criteria type';
 		}
-	} while (swapped);
+	} else {
+		throw 'Criteria required';
+	}
 };
 
 Array.prototype.OrderByDescending = function (parCriteria) {
-	// Bubble sort
-	var swapped, arrayLength = this.length;
-	do {
-		swapped = false;
-		for (var arrayIterator = 0; arrayIterator < arrayLength - 1; arrayIterator++) {
-			var x = parCriteria.call(this[arrayIterator + 1], this[arrayIterator + 1]);
-			var y = parCriteria.call(this[arrayIterator], this[arrayIterator]);
+	if (parCriteria !== void 0) {
+		if (typeof parCriteria === 'string') {
+			// Bubble sort
+			var swapped, arrayLength = this.length;
+			do {
+				swapped = false;
+				for (var arrayIterator = 0; arrayIterator < arrayLength - 1; arrayIterator++) {
+					var x = this[arrayIterator + 1][parCriteria];
+					var y = this[arrayIterator][parCriteria];
 
-			if (x > y) {
-				var temp = this[arrayIterator + 1];
-				this[arrayIterator + 1] = this[arrayIterator];
-				this[arrayIterator] = temp;
-				swapped = true;
-			}
+					if (x > y) {
+						var temp = this[arrayIterator + 1];
+						this[arrayIterator + 1] = this[arrayIterator];
+						this[arrayIterator] = temp;
+						swapped = true;
+					}
+				}
+			} while (swapped);
+		} else {
+			throw 'Invalid Criteria type';
 		}
-	} while (swapped);
+	} else {
+		throw 'Criteria required';
+	}
 };
 
-Array.prototype.Select = function (parClause) {
-	var newList = [], arrayLength = this.length;
+Array.prototype.Select = function (parFields) {
+	if (parFields !== void 0) {
+		if (typeof parFields === 'string') {
+			var newList = [], arrayLength = this.length, fields = parFields.split(','), fieldsLength = fields.length;
 
-	for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
-		if(parClause(this[arrayIterator])) {
-			newList[newList.length] = parClause(this[arrayIterator]);
+			if (fieldsLength === 1) {
+				for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
+					var tempObj = {};
+					tempObj[fields.First()] = this[arrayIterator][fields.First()]
+
+					newList[newList.length] = tempObj;
+				}
+			} else {
+				for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
+					var tempObj = {};
+
+					for (var fieldsIterator = 0; fieldsIterator < fieldsLength; fieldsIterator++) {
+						var field = fields[fieldsIterator].trim();
+
+						tempObj[field] = this[arrayIterator][field]
+					}
+
+					newList[newList.length] = tempObj;
+				}
+			}
+
+			return newList;
+		} else {
+			throw 'Invalid Criteria type';
 		}
+	} else {
+		throw 'Criteria required';
 	}
-
-	return newList;
 };
 
 Array.prototype.SelectMany = function (parClause) {
@@ -143,7 +178,7 @@ Array.prototype.Where = function (parClause) {
 	if (this.length > 0) {
 		var arrayLength = this.length;
 		for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
-			if (parClause.call(this[arrayIterator], this[arrayIterator], arrayIterator)) {
+			if (parClause(this[arrayIterator], arrayIterator)) {
 				newList[newList.length] = this[arrayIterator];
 			}
 		}
