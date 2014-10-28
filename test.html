@@ -15,17 +15,19 @@
 		console.log("Initialize");
 
 		for (var i = 0; i < arrayLength; i++) {
-			//arrayTest[i] = {
-			//	first: Math.floor((Math.random() * 10) + 1)
-			//	, second: Math.floor((Math.random() * 10) + 1)
-			//	, third: Math.floor((Math.random() * 10) + 1)
-			//};
+			/*arrayTest[i] = {
+				first: Math.floor((Math.random() * 10) + 1)
+				, second: Math.floor((Math.random() * 10) + 1)
+				, third: Math.floor((Math.random() * 10) + 1)
+			};*/
 
-			arrayTest[i] = {
+			/*arrayTest[i] = {
 				first: "first" + Math.floor((Math.random() * 10) + 1)
 				, second: "second" + Math.floor((Math.random() * 10) + 1)
 				, third: "third" + Math.floor((Math.random() * 10) + 1)
-			};
+			};*/
+
+			arrayTest[i] = Math.floor((Math.random() * 10) + 1);
 		}
 
 		console.log("End");
@@ -137,16 +139,14 @@
 		}
 
 		console.log("Last");
-		console.log("Total time: " + sum7);*/
+		console.log("Total time: " + sum7);
 
 		var sum8 = 0;
 
 		for (var i = 0; i < totalLoop; i++) {
 			var init = new Date().getTime();
 
-			var resultArray = arrayTest.Distinct(function (each) {
-				return each;
-			});
+			var resultArray = arrayTest.Distinct();
 
 			console.log(resultArray);
 
@@ -156,7 +156,7 @@
 		}
 
 		console.log("Distinct");
-		console.log("Total time: " + sum8);
+		console.log("Total time: " + sum8);*/
 
 		</script>
 	</body>

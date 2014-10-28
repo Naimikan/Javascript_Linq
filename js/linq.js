@@ -11,73 +11,124 @@ Array.prototype.Any = function (parClause) {
 	return false;
 };
 
-//Array.prototype.Distinct = function () {
-	/*var newList = [], arrayLength = this.length;
+Array.prototype.Distinct = function (parClause, parReturnObject) {
+	var newList = [], item, arrayLength = this.length, self = this;
+	var i, l, leftChain = [], rightChain = [];
+
+	// Via http://stackoverflow.com/a/1144249
+	function checkEquality (firstObject, secondObject) {
+		var temp;
+
+		// remember that NaN === NaN returns false
+		// and isNaN(undefined) returns true
+		if (isNaN(firstObject) && isNaN(secondObject) && typeof firstObject === 'number' && typeof secondObject === 'number') {
+			return true;
+		}
+
+		// Compare primitives and functions.     
+		// Check if both arguments link to the same object.
+		// Especially useful on step when comparing prototypes
+		if (firstObject === secondObject) {
+			return true;
+		}
+
+		// Works in case when functions are created in constructor.
+		// Comparing dates is a common scenario. Another built-ins?
+		// We can even handle functions passed across iframes
+		if ((typeof firstObject === 'function' && typeof secondObject === 'function') ||
+			(firstObject instanceof Date && secondObject instanceof Date) ||
+			(firstObject instanceof RegExp && secondObject instanceof RegExp) ||
+			(firstObject instanceof String && secondObject instanceof String) ||
+			(firstObject instanceof Number && secondObject instanceof Number)) {
+			return firstObject.toString() === secondObject.toString();
+		}
+
+		// At last checking prototypes as good a we can
+		if (!(firstObject instanceof Object && secondObject instanceof Object)) {
+			return false;
+		}
+
+		if (firstObject.isPrototypeOf(secondObject) || secondObject.isPrototypeOf(firstObject)) {
+			return false;
+		}
+
+		if (firstObject.constructor !== secondObject.constructor) {
+			return false;
+		}
+
+		if (firstObject.prototype !== secondObject.prototype) {
+			return false;
+		}
+
+		// Check for infinitive linking loops
+		if (leftChain.indexOf(firstObject) > -1 || rightChain.indexOf(secondObject) > -1) {
+			return false;
+		}
+
+		// Quick checking of one object beeing a subset of another.
+		// todo: cache the structure of arguments[0] for performance
+		for (temp in secondObject) {
+			if (secondObject.hasOwnProperty(temp) !== firstObject.hasOwnProperty(temp)) {
+				return false;
+			} else if (typeof secondObject[temp] !== typeof firstObject[temp]) {
+				return false;
+			}
+		}
+
+		for (temp in firstObject) {
+			if (secondObject.hasOwnProperty(temp) !== firstObject.hasOwnProperty(temp)) {
+				return false;
+			} else if (typeof secondObject[temp] !== typeof firstObject[temp]) {
+				return false;
+			}
+
+			switch (typeof (firstObject[temp])) {
+				case 'object':
+				case 'function':
+					leftChain.push(firstObject);
+					rightChain.push(secondObject);
+
+					if (!checkEquality(firstObject[temp], secondObject[temp])) {
+						return false;
+					}
+
+					leftChain.pop();
+					rightChain.pop();
+					break;
+
+				default:
+					if (firstObject[temp] !== secondObject[temp]) {
+						return false;
+					}
+					break;
+			}
+		}
+
+		return true;
+	}
 
 	for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
-		if (this.indexOf(this[arrayIterator]) == arrayIterator) {
+		var tempItem = this[arrayIterator];
+
+		var result = newList.Where(function (each) {
+			return checkEquality(each, tempItem);
+		});
+
+		// !exist
+		if (result.length === 0) {
 			newList.push(this[arrayIterator]);
 		}
 	}
 
-	return newList;*/
-
-	/*return this.filter(function (item, pos, self) {
-	    return self.indexOf(item) == pos;
-	});*/
-
-	/*return this.filter(function (s, i, a) {
-		return i == a.lastIndexOf(s); 
-	});*/
-//};
-
-// Pobema
-/*Array.prototype.Distinct = function (parClause, parReturnObject) {
-	var newList = [], item, arrayLength = this.length;
-
-	var aProps = Object.getOwnPropertyNames(a);
-    var bProps = Object.getOwnPropertyNames(b);
-
-    // If number of properties is different, objects are not equivalent
-
-    if (aProps.length != bProps.length) {
-        return false;
-    }
-
-    for (var i = 0; i < aProps.length; i++) {
-        var propName = aProps[i];
-
-        // If values of same property are not equal, objects are not equivalent
-        if (a[propName] !== b[propName]) {
-           return false;
-        }
-    }
-
-	
-
-	for (var arrayIterator = 0; arrayIterator < arrayLength; arrayIterator++) {
-		item = parClause.call(this[arrayIterator], this[arrayIterator]);
-		if (distinct[item] === void 0) {
-			distinct[item] = true;
-
-			if (parReturnObject) {
-				newList[arrayIterator] = this[arrayIterator];
-			} else {
-				newList[arrayIterator] = item;
-			}
-		}
-	}
-
-	distinct = null;
 	return newList;
-};*/
+};
 
 Array.prototype.First = function () {
 	return this[0];
 };
 
 Array.prototype.Intersect = function (parSecondArray, parClause) {
-	var clauseMethod, secondArray = parSecondArray, result = [];
+	var clauseMethod, secondArray = parSecondArray, result = [], thisArrayLength = this.length, secondArrayLength = parSecondArray.length;
 
 	if (parClause !== void 0) {
 		clauseMethod = parClause;
@@ -87,8 +138,8 @@ Array.prototype.Intersect = function (parSecondArray, parClause) {
 		};
 	}
 
-	for (var iteratorFirst = 0; iteratorFirst < this.length; iteratorFirst++) {
-		for (var iteratorSecond = 0; iteratorSecond < secondArray.length; iteratorSecond++) {
+	for (var iteratorFirst = 0; iteratorFirst < thisArrayLength; iteratorFirst++) {
+		for (var iteratorSecond = 0; iteratorSecond < secondArrayLength; iteratorSecond++) {
 			if (clauseMethod(this[iteratorFirst], iteratorFirst, secondArray[iteratorSecond], iteratorSecond)) {
 				result[result.length] = this[iteratorFirst];
 			}
